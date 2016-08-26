@@ -26,8 +26,8 @@
   "typings": "./angular2-jwt.d.ts",
   "homepage": "https://github.com/auth0/angular2-jwt#readme",
   "devDependencies": {
-    "@angular/core": "^2.0.0-rc.4",
-    "@angular/http": "^2.0.0-rc.4",
+    "@angular/core": "^2.0.0-rc.5",
+    "@angular/http": "^2.0.0-rc.5",
     "awesome-typescript-loader": "^0.17.0",
     "core-js": "^2.3.0",
     "es6-shim": "^0.35.0",

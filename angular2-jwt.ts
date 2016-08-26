@@ -1,5 +1,6 @@
-import { provide, Injectable } from '@angular/core';
-import { Http, Headers, Request, RequestOptions, RequestOptionsArgs, RequestMethod, Response } from '@angular/http';
+import { provide, Injectable, NgModule, ModuleWithProviders } from '@angular/core';
+import { Http, Headers, Request, RequestOptions, RequestOptionsArgs, RequestMethod, Response,
+    HttpModule } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 
 // Avoid TS error "cannot find name escape"
@@ -249,4 +250,26 @@ export function provideAuth(config = {}): any[] {
       }
     })
   ];
+}
+
+@NgModule({
+  imports: [],
+  providers: [AUTH_PROVIDERS],
+  declarations: [],
+  exports: []
+})
+export class AuthModule {
+
+  static forRoot(providedLoader: any = {
+    provide: AuthHttp,
+    useFactory: (http: Http, options: RequestOptions) => {
+      return new AuthHttp(new AuthConfig(), http, options);
+    },
+    deps: [Http, RequestOptions]
+  }): ModuleWithProviders {
+    return {
+      ngModule: AuthModule,
+      providers: [providedLoader, AuthHttp]
+    };
+  }
 }
