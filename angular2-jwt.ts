@@ -1,4 +1,4 @@
-import { provide, Injectable, NgModule, ModuleWithProviders } from '@angular/core';
+import { Injectable, NgModule, ModuleWithProviders } from '@angular/core';
 import { Http, Headers, Request, RequestOptions, RequestOptionsArgs, RequestMethod, Response,
     HttpModule } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
@@ -19,7 +19,6 @@ export interface IAuthConfig {
 /**
  * Sets up the authentication configuration.
  */
-
 export class AuthConfig {
 
   public globalHeaders: Array<Object>;
@@ -232,44 +231,22 @@ export function tokenNotExpired(tokenName = 'id_token', jwt?: string): boolean {
   return token != null && !jwtHelper.isTokenExpired(token);
 }
 
-export const AUTH_PROVIDERS: any = [
-  provide(AuthHttp, {
-    deps: [Http, RequestOptions],
-    useFactory: (http: Http, options: RequestOptions) => {
-      return new AuthHttp(new AuthConfig(), http, options);
-    }
-  })
-];
-
-export function provideAuth(config = {}): any[] {
-  return [
-    provide(AuthHttp, {
-      deps: [Http, RequestOptions],
-      useFactory: (http: Http, options: RequestOptions) => {
-        return new AuthHttp(new AuthConfig(config), http, options);
-      }
-    })
-  ];
-}
 
 @NgModule({
-  imports: [],
-  providers: [AUTH_PROVIDERS],
+  imports: [HttpModule],
+  providers: [AuthHttp],
   declarations: [],
   exports: []
 })
-export class AuthModule {
+export class JwtModule {
 
-  static forRoot(providedLoader: any = {
-    provide: AuthHttp,
-    useFactory: (http: Http, options: RequestOptions) => {
-      return new AuthHttp(new AuthConfig(), http, options);
-    },
-    deps: [Http, RequestOptions]
-  }): ModuleWithProviders {
+  static forRoot(config: AuthConfig = new AuthConfig()): ModuleWithProviders {
+
     return {
-      ngModule: AuthModule,
-      providers: [providedLoader, AuthHttp]
+      ngModule: JwtModule,
+      providers: [
+        { provide: AuthConfig, useValue: config }
+      ]
     };
   }
 }
